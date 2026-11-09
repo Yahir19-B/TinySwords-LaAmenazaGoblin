@@ -1,0 +1,33 @@
+# --- Unity ---
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+*.csproj
+*.sln
+*.slnx
+*.unityproj
+*.pidb
+*.userprefs
+*.pdb
+*.mdb
+.vscode/
+.idea/
+.vs/
+.DS_Store
+
+# Archivos temporales de las herramientas de desarrollo
+/TinySwords*.txt
+
+# --- Arte original de Tiny Swords (Pixel Frog) ---
+# La licencia del pack no permite redistribuir los archivos originales.
+# Se conservan los .meta (cortes de sprites e identificadores) para que el proyecto
+# funcione al volver a copiar el pack en estas carpetas (ver README).
+/Assets/images/Tiny Swords*/**/*.png
+/Assets/images/Tiny Swords*/**/*.aseprite
+/Assets/images/Tiny Swords*/**/*.zip

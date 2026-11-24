@@ -100,8 +100,8 @@ public class PlayerLoadout : MonoBehaviour
         UpdateSlot(dashSlot, player.DashCooldownLeft);
 
         if (player.IsDead || Time.timeScale == 0f) return;
-        if (hasWhirlwind && whirlwindTimer <= 0 && Input.GetKeyDown(whirlwindKey)) Whirlwind();
-        if (hasPotion && potionTimer <= 0 && Input.GetKeyDown(potionKey)) DrinkPotion();
+        if (hasWhirlwind && whirlwindTimer <= 0 && (Input.GetKeyDown(whirlwindKey) || TouchControls.WhirlwindDown)) Whirlwind();
+        if (hasPotion && potionTimer <= 0 && (Input.GetKeyDown(potionKey) || TouchControls.PotionDown)) DrinkPotion();
     }
 
     void Whirlwind()
@@ -133,10 +133,39 @@ public class PlayerLoadout : MonoBehaviour
     {
         var hud = LevelHUD.Instance;
         if (hud == null) return;
+        if (TouchControls.Enabled)
+        {
+            // En el celular los poderes son botones táctiles a la derecha.
+            CreateTouchSlot(hud.transform, null, "Atacar", TouchControls.Kind.Attack);
+            dashSlot = CreateTouchSlot(hud.transform, dashIcon, "Esquivar", TouchControls.Kind.Dash);
+            if (hasWhirlwind) whirlwindSlot = CreateTouchSlot(hud.transform, whirlwindIcon, "Torbellino", TouchControls.Kind.Whirlwind);
+            if (hasPotion) potionSlot = CreateTouchSlot(hud.transform, potionIcon, "Poción", TouchControls.Kind.Potion);
+            return;
+        }
         int index = 0;
         dashSlot = CreateSlot(hud.transform, dashIcon, "Shift", index++);
         if (hasWhirlwind) whirlwindSlot = CreateSlot(hud.transform, whirlwindIcon, whirlwindKey.ToString(), index++);
         if (hasPotion) potionSlot = CreateSlot(hud.transform, potionIcon, potionKey.ToString(), index);
+    }
+
+    Slot CreateTouchSlot(Transform hud, Sprite icon, string label, TouchControls.Kind kind)
+    {
+        var root = hud.Find("ControlesTactiles");
+        var slot = CreateSlot(root != null ? root : hud, icon, "", 0);
+        var frame = (RectTransform)slot.icon.transform.parent;
+        frame.name = "Tactil_" + kind;
+        frame.anchorMin = frame.anchorMax = new Vector2(1, 0);
+        frame.pivot = new Vector2(0.5f, 0.5f);
+        float size = TouchControls.Size(kind);
+        frame.sizeDelta = new Vector2(size, size);
+        frame.anchoredPosition = TouchControls.Position(kind) + new Vector2(-size / 2, size / 2);
+        slot.icon.enabled = icon != null;
+        slot.icon.raycastTarget = false;
+        var text = NewText(frame, label, icon == null ? 46 : 24);
+        Stretch(text.rectTransform, 12);
+        text.alignment = icon == null ? TextAlignmentOptions.Center : TextAlignmentOptions.Bottom;
+        TouchControls.MakeButton(frame.gameObject, kind);
+        return slot;
     }
 
     Slot CreateSlot(Transform parent, Sprite icon, string key, int index)

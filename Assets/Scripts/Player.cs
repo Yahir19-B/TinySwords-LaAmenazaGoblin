@@ -79,6 +79,7 @@ public class Player : MonoBehaviour
 
         movementInput.x = Input.GetAxisRaw("Horizontal");
         movementInput.y = Input.GetAxisRaw("Vertical");
+        if (TouchControls.Enabled && TouchControls.Move != Vector2.zero) movementInput = TouchControls.Move;
         movementInput = movementInput.normalized;
 
         if (movementInput != Vector2.zero)
@@ -92,7 +93,7 @@ public class Player : MonoBehaviour
         dashTime -= Time.deltaTime;
         bool attacking = attackTimer > 0;
 
-        if (dashTimer <= 0 && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift) || Input.GetKeyDown(KeyCode.K)))
+        if (dashTimer <= 0 && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift) || Input.GetKeyDown(KeyCode.K) || TouchControls.DashDown))
         {
             // Esquivar: impulso rápido hacia donde te mueves, sin recibir daño por un instante.
             dashDir = movementInput != Vector2.zero ? movementInput : facing;
@@ -103,7 +104,7 @@ public class Player : MonoBehaviour
             AudioManager.Play("esquivar");
         }
 
-        if (!attacking && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.J) || Input.GetMouseButtonDown(0)))
+        if (!attacking && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.J) || Input.GetMouseButtonDown(0) || TouchControls.AttackHeld))
             StartCoroutine(Attack());
         else if (!attacking)
             unitAnim.Play(movementInput != Vector2.zero ? "Run" : "Idle");

@@ -8,6 +8,12 @@ Videojuego 2D de acción y aventura hecho en **Unity 6**. Eres el **Caballero Az
 
 Funciona en computadora con Chrome, Edge, Firefox o Safari (teclado y mouse). La primera carga tarda unos segundos. El progreso se guarda en tu navegador.
 
+## 📱 Descargar para Android
+
+**https://github.com/Yahir19-B/TinySwords-LaAmenazaGoblin/releases/latest/download/TinySwords.apk**
+
+Android 8 o superior, procesador de 64 bits. Abre el archivo en el celular, permite instalar de esa fuente y toca Instalar. Se juega con palanca y botones en la pantalla.
+
 ## Controles
 
 | Tecla | Acción |
@@ -37,7 +43,7 @@ Para ganar un nivel hay que derrotar a todos los goblins y destruir sus casas.
 3. Copia el contenido del pack en `Assets/images/Tiny Swords (Update 010)/` (y el *Free Pack* en `Assets/images/Tiny Swords (Free Pack)/`), respetando las carpetas. Los archivos `.meta` que ya están en el repositorio conservan los cortes de los sprites.
 4. Abre el proyecto en Unity Hub y luego la escena `Assets/Scenes/MainMenu.unity`.
 
-El menú **Tiny Swords** del editor tiene las herramientas del proyecto: abrir escenas, regenerar niveles y compilar para navegador (WebGL, en la carpeta `docs/`).
+El menú **Tiny Swords** del editor tiene las herramientas del proyecto: abrir escenas, regenerar niveles y compilar para navegador (WebGL, en la carpeta `docs/`) y para Android (APK, en `Builds/Android/`).
 
 ## Equipo
 

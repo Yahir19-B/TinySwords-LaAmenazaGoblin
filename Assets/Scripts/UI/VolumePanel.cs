@@ -58,7 +58,7 @@ public class VolumePanel : MonoBehaviour
 
     void Update()
     {
-        string text = AudioManager.Muted ? "SILENCIADO (M para oír)" : "M: silenciar";
+        string text = AudioManager.Muted ? "SILENCIADO (M para oír)" : (TouchControls.Enabled ? "" : "M: silenciar");
         if (hint.text != text) hint.text = text;
     }
 

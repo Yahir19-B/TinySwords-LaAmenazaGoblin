@@ -32,3 +32,6 @@
 /Assets/images/Tiny Swords*/**/*.png
 /Assets/images/Tiny Swords*/**/*.aseprite
 /Assets/images/Tiny Swords*/**/*.zip
+
+# Ícono armado con el arte del pack (se regenera con Tools/icono/generar_icono.py)
+/Assets/Icono/*.png

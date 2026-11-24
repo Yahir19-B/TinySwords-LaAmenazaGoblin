@@ -11,7 +11,10 @@ public class TouchControls : MonoBehaviour
     // Para probarlos en el editor: ponlo en true antes de dar Play.
     public static bool ForceInEditor;
 
-    public static bool Enabled => Application.isMobilePlatform || (Application.isEditor && ForceInEditor);
+    public static bool Enabled => isTouchDevice || (Application.isEditor && ForceInEditor);
+
+    // La página web manda "-tactil" en el iPad, que se presenta como computadora.
+    static readonly bool isTouchDevice = Application.isMobilePlatform || System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-tactil") >= 0;
 
     // Lo que leen el héroe y sus poderes.
     public static Vector2 Move { get; private set; }

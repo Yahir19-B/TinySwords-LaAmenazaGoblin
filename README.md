@@ -8,11 +8,19 @@ Videojuego 2D de acción y aventura hecho en **Unity 6**. Eres el **Caballero Az
 
 Funciona en computadora con Chrome, Edge, Firefox o Safari (teclado y mouse). La primera carga tarda unos segundos. El progreso se guarda en tu navegador.
 
+**En iPhone o iPad:** abre el link en Safari, gira el celular y juega con la palanca y los botones en pantalla. Para tenerlo como app: Compartir > Agregar a inicio.
+
 ## 📱 Descargar para Android
 
 **https://github.com/Yahir19-B/TinySwords-LaAmenazaGoblin/releases/latest/download/TinySwords.apk**
 
 Android 8 o superior, procesador de 64 bits. Abre el archivo en el celular, permite instalar de esa fuente y toca Instalar. Se juega con palanca y botones en la pantalla.
+
+## 💻 Descargar para Windows
+
+**https://github.com/Yahir19-B/TinySwords-LaAmenazaGoblin/releases/latest/download/TinySwords-Windows.zip**
+
+Windows 10 u 11 de 64 bits. Extrae todo el .zip y abre `TinySwords.exe`. Si Windows avisa que protegió tu PC: *Más información > Ejecutar de todas formas*.
 
 ## Controles
 

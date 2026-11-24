@@ -10,6 +10,9 @@ using UnityEngine;
 // Desde la terminal: Unity -batchmode -quit -projectPath <proyecto> -buildTarget Android -executeMethod TinySwordsAndroidBuild.Build
 public static class TinySwordsAndroidBuild
 {
+    // Súbelos en cada versión nueva para que el celular la instale encima de la anterior.
+    const string Version = "1.0.1";
+    const int VersionCode = 2;
     const string OutFile = "Builds/Android/TinySwords.apk";
 
     [MenuItem("Tiny Swords/Compilar para Android (APK)", priority = 51)]
@@ -39,6 +42,8 @@ public static class TinySwordsAndroidBuild
         {
             PlayerSettings.productName = "Tiny Swords";
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.yahir19b.tinyswords");
+            PlayerSettings.bundleVersion = Version;
+            PlayerSettings.Android.bundleVersionCode = VersionCode;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
@@ -48,6 +53,7 @@ public static class TinySwordsAndroidBuild
             PlayerSettings.allowedAutorotateToLandscapeRight = true;
             PlayerSettings.Android.useCustomKeystore = false;   // firma de prueba: instala bien, pero no sirve para Play Store
             EditorUserBuildSettings.buildAppBundle = false;
+            SetIcons();
 
             Directory.CreateDirectory(Path.GetDirectoryName(OutFile));
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
@@ -68,4 +74,29 @@ public static class TinySwordsAndroidBuild
         }
         if (Application.isBatchMode) EditorApplication.Exit(ok ? 0 : 1);
     }
+
+    // Ícono del Caballero Azul (lo genera Tools/icono/generar_icono.py en Assets/Icono).
+    static void SetIcons()
+    {
+#if UNITY_ANDROID
+        Texture2D back = Icon("fondo"), front = Icon("frente");
+        if (back == null || front == null)
+        {
+            Debug.LogWarning("Tiny Swords: faltan los íconos en Assets/Icono; se usa el de Unity.");
+            return;
+        }
+        Apply(UnityEditor.Android.AndroidPlatformIconKind.Adaptive, back, front);
+#endif
+    }
+
+#if UNITY_ANDROID
+    static Texture2D Icon(string name) => AssetDatabase.LoadAssetAtPath<Texture2D>($"Assets/Icono/{name}.png");
+
+    static void Apply(PlatformIconKind kind, params Texture2D[] layers)
+    {
+        var icons = PlayerSettings.GetPlatformIcons(NamedBuildTarget.Android, kind);
+        foreach (var icon in icons) icon.SetTextures(layers);
+        PlayerSettings.SetPlatformIcons(NamedBuildTarget.Android, kind, icons);
+    }
+#endif
 }

@@ -37,6 +37,7 @@ public class ResourcePickup : MonoBehaviour
             if (type == ResourceType.Gold && LevelManager.Instance != null) LevelManager.Instance.AddGold(amount);
             if (healAmount > 0) player.Health.Heal(healAmount);
             if (pickupSound != null) AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+            else AudioManager.Play(healAmount > 0 ? "carne" : "moneda");
             Destroy(gameObject);
         }
     }

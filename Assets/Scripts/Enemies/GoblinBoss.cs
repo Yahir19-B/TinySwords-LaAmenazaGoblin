@@ -39,13 +39,23 @@ public class GoblinBoss : MonoBehaviour
     public float enrageMultiplier = 1.5f;
 
     public Health Health { get; private set; }
-    public bool IsAwake { get; private set; }
+    bool awake;
+    public bool IsAwake
+    {
+        get => awake;
+        private set
+        {
+            if (value && !awake) AudioManager.Play("jefe_rugido");
+            awake = value;
+        }
+    }
     public bool Enraged => Health.Normalized <= enrageBelow;
 
     UnitAnimator unitAnim;
     Rigidbody2D rb;
     Vector2 desiredVelocity;
     bool busy;
+    bool furySounded;
     float slamTimer, throwTimer = 3f, summonTimer = 6f;
 
     void Awake()
@@ -54,7 +64,7 @@ public class GoblinBoss : MonoBehaviour
         Health.team = Team.Goblins;
         unitAnim = GetComponent<UnitAnimator>();
         rb = GetComponent<Rigidbody2D>();
-        Health.OnDied += () => { StopAllCoroutines(); enabled = false; CameraFollow.Shake(0.4f, 0.8f); };
+        Health.OnDied += () => { StopAllCoroutines(); enabled = false; AudioManager.Play("jefe_muere"); CameraFollow.Shake(0.4f, 0.8f); };
         Health.OnDamaged += _ => IsAwake = true;
     }
 
@@ -82,6 +92,11 @@ public class GoblinBoss : MonoBehaviour
             return;
         }
 
+        if (Enraged && !furySounded)
+        {
+            furySounded = true;
+            AudioManager.Play("jefe_furia");
+        }
         float rate = Enraged ? enrageMultiplier : 1f;
         slamTimer -= Time.deltaTime * rate;
         throwTimer -= Time.deltaTime * rate;
@@ -119,6 +134,7 @@ public class GoblinBoss : MonoBehaviour
         yield return new WaitForSeconds(slamHitDelay);
 
         Vector2 point = (Vector2)transform.position + toPlayer.normalized * 0.8f;
+        AudioManager.Play("jefe_golpe", point);
         CombatUtils.DamageArea(point, slamRadius, Team.Goblins, slamDamage);
         if (slamEffectPrefab != null) Instantiate(slamEffectPrefab, point, Quaternion.identity);
         CameraFollow.Shake(0.25f, 0.3f);
@@ -138,6 +154,7 @@ public class GoblinBoss : MonoBehaviour
             unitAnim?.Play("Attack", true);
             Vector2 target = (Vector2)player.transform.position + Random.insideUnitCircle * 1.2f;
             var p = Instantiate(dynamitePrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
+            AudioManager.Play("lanzar", transform.position);
             p.Launch(null, target, Team.Goblins, throwDamage);
             yield return new WaitForSeconds(0.35f);
         }
@@ -148,6 +165,7 @@ public class GoblinBoss : MonoBehaviour
     {
         busy = true;
         summonTimer = summonCooldown;
+        AudioManager.Play("jefe_invoca");
         unitAnim?.Play("Idle");
         CameraFollow.Shake(0.15f, 0.5f);
         yield return new WaitForSeconds(0.5f);

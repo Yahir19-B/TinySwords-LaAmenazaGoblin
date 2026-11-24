@@ -47,6 +47,7 @@ public class AmbushZone : MonoBehaviour
             e.attackDamage *= damageMultiplier;
             e.aggroRange = 20f;
         }
+        AudioManager.Play("emboscada");
         CameraFollow.Shake(0.2f, 0.4f);
         LevelHUD.Instance?.ShowMessage("¡EMBOSCADA!", 2f);
         Destroy(gameObject, 0.1f);

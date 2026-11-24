@@ -59,6 +59,7 @@ public class EnemyAI : MonoBehaviour
     Vector2 desiredVelocity;
     float dashTimer = 2f;
     float zigzagSeed;
+    bool shouted;
 
     void Awake()
     {
@@ -82,6 +83,12 @@ public class EnemyAI : MonoBehaviour
         {
             retargetTimer = 0.5f;
             target = ChooseTarget();
+            // Grito la primera vez que ve al héroe.
+            if (!shouted && target != null && !target.isStructure && attackType != EnemyAttackType.Kamikaze)
+            {
+                shouted = true;
+                AudioManager.Play("goblin_grito", transform.position, 0.6f);
+            }
         }
 
         if (target == null)
@@ -151,17 +158,20 @@ public class EnemyAI : MonoBehaviour
 
         if (attackType == EnemyAttackType.Kamikaze)
         {
+            AudioManager.Play("mecha", transform.position);
             yield return new WaitForSeconds(fuseTime);
             Explode();
             yield break;
         }
 
+        if (attackType == EnemyAttackType.Melee) AudioManager.Play(canDash ? "espada" : "antorcha", transform.position, 0.7f);
         yield return new WaitForSeconds(hitDelay);
 
         if (victim != null && !victim.IsDead)
         {
             if (attackType == EnemyAttackType.Ranged && projectilePrefab != null)
             {
+                AudioManager.Play(projectilePrefab.arc ? "lanzar" : "flecha", transform.position);
                 for (int i = 0; i < projectilesPerAttack; i++)
                 {
                     Vector2 aim = victim.transform.position;
@@ -190,6 +200,7 @@ public class EnemyAI : MonoBehaviour
         unitAnim?.Play("Idle");
         yield return new WaitForSeconds(0.35f); // aviso antes de cargar
         unitAnim?.Play("Run");
+        AudioManager.Play("embestida", transform.position);
         float t = 0;
         while (t < 0.45f && victim != null && !victim.IsDead)
         {
@@ -220,6 +231,7 @@ public class EnemyAI : MonoBehaviour
 
     void Explode()
     {
+        AudioManager.Play("explosion", transform.position);
         CombatUtils.DamageArea(transform.position, explosionRadius, Team.Goblins, attackDamage, structureDamageMultiplier);
         if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         // Muere sin soltar botín para que el jugador no gane oro por dejarse explotar.

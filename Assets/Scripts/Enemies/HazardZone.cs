@@ -27,6 +27,7 @@ public class HazardZone : MonoBehaviour
                 active = !active;
                 cycleTimer = cycleTime;
                 if (visual != null) visual.SetActive(active);
+                if (active) AudioManager.Play("fuego", transform.position, 0.5f);
             }
         }
         if (!active) return;

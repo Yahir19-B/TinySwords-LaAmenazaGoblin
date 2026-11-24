@@ -100,6 +100,7 @@ public class Player : MonoBehaviour
             dashTimer = dashCooldown;
             Health.InvulnerableTime = dashInvulnerability;
             unitAnim.Play("Run", true);
+            AudioManager.Play("esquivar");
         }
 
         if (!attacking && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.J) || Input.GetMouseButtonDown(0)))
@@ -144,6 +145,7 @@ public class Player : MonoBehaviour
         }
         unitAnim.Play(state, true);
         if (swingSound != null) AudioSource.PlayClipAtPoint(swingSound, transform.position);
+        else AudioManager.Play("espada", 0.7f);
 
         yield return new WaitForSeconds(hitDelay);
         if (IsDead) yield break;
@@ -151,6 +153,7 @@ public class Player : MonoBehaviour
         Vector2 hitPoint = (Vector2)transform.position + dir * attackReach;
         bool crit = Random.value < critChance;
         int hits = CombatUtils.DamageArea(hitPoint, attackRadius, Team.Knights, crit ? attackDamage * critMultiplier : attackDamage, structureDamageMultiplier, crit);
+        if (hits > 0) AudioManager.Play(crit ? "critico" : "impacto");
         if (crit && hits > 0) CameraFollow.Shake(0.08f, 0.12f);
     }
 

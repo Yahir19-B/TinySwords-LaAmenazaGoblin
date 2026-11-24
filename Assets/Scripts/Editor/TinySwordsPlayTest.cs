@@ -168,6 +168,10 @@ public static class TinySwordsPlayTest
         sb.AppendLine("Escena: " + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         sb.AppendLine("GameState: " + (GameManager.Instance != null ? GameManager.Instance.State.ToString() : "sin GameManager"));
         sb.AppendLine($"Progreso: desbloqueado hasta {Progress.Unlocked}");
+        // Audio: qué sonó, qué música hay y si faltó algún archivo.
+        sb.AppendLine("Música: " + (AudioManager.Instance != null ? AudioManager.Instance.CurrentMusic : "sin AudioManager"));
+        sb.AppendLine("Sonidos: " + string.Join(", ", AudioManager.Played.OrderBy(p => p.Key).Select(p => p.Key + " x" + p.Value)));
+        sb.AppendLine("Sonidos que faltan: " + (AudioManager.Missing.Count == 0 ? "ninguno" : string.Join(", ", AudioManager.Missing)));
         sb.AppendLine("FIN");
         File.AppendAllText(LogFile, sb.ToString());
     }

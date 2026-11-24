@@ -66,7 +66,10 @@ public class Projectile : MonoBehaviour
     void Impact()
     {
         if (areaRadius > 0)
+        {
+            AudioManager.Play("explosion", transform.position, 0.8f);
             CombatUtils.DamageArea(transform.position, areaRadius, team, damage, structureDamageMultiplier);
+        }
         else if (!homing)
             CombatUtils.DamageArea(transform.position, hitRadius, team, damage);
         else if (target != null && !target.IsDead)

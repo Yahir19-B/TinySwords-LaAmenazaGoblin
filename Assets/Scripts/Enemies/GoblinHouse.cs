@@ -65,6 +65,7 @@ public class GoblinHouse : MonoBehaviour
 
     void OnDestroyed()
     {
+        AudioManager.Play("casa_destruida", transform.position);
         if (spriteRenderer != null && destroyedSprite != null) spriteRenderer.sprite = destroyedSprite;
         if (destroyEffectPrefab != null) Instantiate(destroyEffectPrefab, transform.position + Vector3.up * 0.6f, Quaternion.identity);
         if (fireEffectPrefab != null) Instantiate(fireEffectPrefab, transform.position + new Vector3(0.2f, 0.9f), Quaternion.identity, transform);

@@ -19,6 +19,7 @@ Funciona en computadora con Chrome, Edge, Firefox o Safari (teclado y mouse). La
 | R | Poción de vida (se compra en la Tienda) |
 | Esc | Pausa |
 | H | Ver los controles |
+| M | Silenciar (el volumen se ajusta en el menú y en la pausa) |
 
 ## El juego
 
@@ -49,4 +50,5 @@ Proyecto de la materia *Creación de videojuegos*, grupo 1002, Universidad Tecno
 ## Créditos
 
 - Arte: **[Tiny Swords](https://pixelfrog-assets.itch.io/tiny-swords)** por Pixel Frog.
+- Música y efectos: generados por código con `Tools/audio/generar_audio.py` (sin muestras externas).
 - Motor: Unity 6 con Universal Render Pipeline 2D.

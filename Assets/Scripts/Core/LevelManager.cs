@@ -79,6 +79,7 @@ public class LevelManager : MonoBehaviour
         comboTimer = comboWindow;
         if (Combo >= comboMinForBonus)
         {
+            AudioManager.Play("combo");
             int bonus = Mathf.Min(Combo, maxComboBonus);
             GoldCollected += bonus;
             var player = Player.Instance;

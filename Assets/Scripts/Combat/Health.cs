@@ -72,7 +72,8 @@ public class Health : MonoBehaviour
         Current = Mathf.Max(0, Current - amount);
         OnDamaged?.Invoke(amount);
         OnChanged?.Invoke();
-        PlaySound(hitSound);
+        if (hitSound != null) PlaySound(hitSound);
+        else if (amount < 9999 && Current > 0) PlayHurt();
 
         if (showDamageNumbers && amount < 9999)
             DamagePopup.Show(transform.position + Vector3.up * (1f + radius), amount, critical, team == Team.Knights && !isStructure);
@@ -107,7 +108,8 @@ public class Health : MonoBehaviour
     void Die()
     {
         IsDead = true;
-        PlaySound(deathSound);
+        if (deathSound != null) PlaySound(deathSound);
+        else PlayDeath();
 
         if (deathEffectPrefab != null)
             Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
@@ -143,6 +145,21 @@ public class Health : MonoBehaviour
         for (int i = 0; i < flashRenderers.Count; i++)
             if (flashRenderers[i] != null) flashRenderers[i].color = originalColors[i];
         flashRoutine = null;
+    }
+
+    // Sonidos según quién recibe el golpe (el jefe y las casas tienen los suyos al morir).
+    void PlayHurt()
+    {
+        if (isStructure || team == Team.Neutral) AudioManager.Play("madera", transform.position);
+        else if (team == Team.Knights) AudioManager.Play("heroe_herido");
+        else if (GetComponent<GoblinBoss>() == null) AudioManager.Play("goblin_herido", transform.position, 0.7f);
+    }
+
+    void PlayDeath()
+    {
+        if (isStructure || team == Team.Neutral) return;
+        if (team == Team.Knights) AudioManager.Play("heroe_muere");
+        else if (GetComponent<GoblinBoss>() == null) AudioManager.Play("goblin_muere", transform.position);
     }
 
     void PlaySound(AudioClip clip)

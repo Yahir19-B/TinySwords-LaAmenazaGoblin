@@ -25,7 +25,7 @@ public class ShopItemCard : MonoBehaviour
     {
         if (item == null) return;
         if (item.type == ShopItemType.Skin && Shop.IsOwned(item)) Shop.Equip(item);
-        else Shop.TryBuy(item);
+        else if (Shop.TryBuy(item)) AudioManager.Play("comprar");
         // Al comprar cambia el oro, así que se actualizan todas las tarjetas.
         foreach (var card in FindObjectsByType<ShopItemCard>()) card.Refresh();
     }

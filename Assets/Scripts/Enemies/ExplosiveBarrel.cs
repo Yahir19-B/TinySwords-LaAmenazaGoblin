@@ -22,7 +22,9 @@ public class ExplosiveBarrel : MonoBehaviour
 
     IEnumerator Explode()
     {
+        AudioManager.Play("mecha", transform.position);
         yield return new WaitForSeconds(fuse);
+        AudioManager.Play("barril", transform.position);
         if (explosionPrefab != null) Instantiate(explosionPrefab, transform.position + Vector3.up * 0.3f, Quaternion.identity);
         CameraFollow.Shake(0.2f, 0.3f);
         CombatUtils.DamageArea(transform.position, radius, Team.Neutral, damage, 1f);

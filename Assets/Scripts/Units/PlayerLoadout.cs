@@ -90,8 +90,11 @@ public class PlayerLoadout : MonoBehaviour
 
     void Update()
     {
+        bool cooling = whirlwindTimer > 0, potionCooling = potionTimer > 0;
         whirlwindTimer -= Time.deltaTime;
         potionTimer -= Time.deltaTime;
+        // Aviso de que un poder ya se puede usar otra vez.
+        if ((cooling && whirlwindTimer <= 0) || (potionCooling && potionTimer <= 0)) AudioManager.Play("poder_listo");
         UpdateSlot(whirlwindSlot, whirlwindTimer);
         UpdateSlot(potionSlot, potionTimer);
         UpdateSlot(dashSlot, player.DashCooldownLeft);
@@ -104,6 +107,7 @@ public class PlayerLoadout : MonoBehaviour
     void Whirlwind()
     {
         whirlwindTimer = whirlwindCooldown;
+        AudioManager.Play("torbellino");
         unitAnim?.Play("AttackDown", true);
         CombatUtils.DamageArea(transform.position, whirlwindRadius, Team.Knights, player.attackDamage * whirlwindDamageMultiplier, 0.5f);
         if (whirlwindEffect != null)
@@ -118,6 +122,7 @@ public class PlayerLoadout : MonoBehaviour
     {
         if (player.Health.IsFull) return;
         potionTimer = potionCooldown;
+        AudioManager.Play("pocion");
         player.Health.Heal(player.Health.maxHealth * potionHeal);
         LevelHUD.Instance?.ShowMessage("¡Poción! +vida", 1.5f);
     }
